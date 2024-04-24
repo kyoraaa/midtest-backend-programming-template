@@ -17,9 +17,19 @@ async function getUsers(request, response, next) {
     if (page){
       const startIndex = (page - 1) * limit;
       const endIndex = page * limit;
-      const resultUsers = users.slice(startIndex, endIndex)     
-      return response.json(resultUsers);  
+      const resultUsers = users.slice(startIndex, endIndex); 
+      const count = users.length
+      const total_pages =  Math.ceil(count/limit);
+      
+      const prev = () => {return page > 1}
+      const after = () => {return page < total_pages};
+
+      const has_previous_page = prev();
+      const has_next_page = after();
+
+      return response.json({page,limit,count,total_pages,has_previous_page,has_next_page,resultUsers});  
     }
+
     else{
       return response.json({users});
     }
