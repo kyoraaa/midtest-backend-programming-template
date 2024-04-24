@@ -20,7 +20,7 @@ async function getUsers(request, response, next) {
       const resultUsers = users.slice(startIndex, endIndex); 
       const count = users.length
       const total_pages =  Math.ceil(count/limit);
-      
+
       const prev = () => {return page > 1}
       const after = () => {return page < total_pages};
 
@@ -33,6 +33,7 @@ async function getUsers(request, response, next) {
     else{
       return response.json({users});
     }
+    
   }
     catch (error) {
     return next(error);
