@@ -7,19 +7,67 @@ const { errorResponder, errorTypes } = require('../../../core/errors');
  * @param {object} response - Express response object
  * @param {object} next - Express route middlewares
  * @returns {object} Response object or pass an error to the next route
- */
+*/
 async function getUsers(request, response, next) {
   try {
     const users = await usersService.getUsers();
+    const { sort, search } = request.query;
+
+    let sortField = 'email';
+    let sortOrder = 'asc';
+    if (sort) {
+        const [field, order] = sort.split(':');
+        if (['email', 'name'].includes(field)) {
+            sortField = field;
+            if(order === 'desc'){
+              sortOrder = 'desc';
+            }else{
+              sortOrder = 'asc';
+            }
+        }
+    }
+
+    let searchField = null;
+    let searchKey = null;
+    if (search) {
+        const [field, key] = search.split(':');
+        if (['email', 'name'].includes(field)) {
+            searchField = field;
+            searchKey = key;
+        }
+    }
+
+    request.sortField = sortField;
+    request.sortOrder = sortOrder;
+    request.searchField = searchField;
+    request.searchKey = searchKey;
+
+    let filteredUsers = users;
     const page_number = parseInt(request.query.page_number);
     const page_size = parseInt(request.query.page_size);
-
+    
     if (page_number) {
+
+      if (request.searchField && request.searchKey) {
+        filteredUsers = filteredUsers.filter(user =>
+          user[request.searchField].includes(request.searchKey)
+        );
+      }
+      filteredUsers.sort((a, b) => {
+        if (request.sortOrder === 'asc') {
+          return a[request.sortField].localeCompare(b[request.sortField]);
+        } else {
+          return b[request.sortField].localeCompare(a[request.sortField]);
+        }
+      });
+
+
       const startIndex = (page_number - 1) * page_size;
       const endIndex = page_number * page_size;
-      const data = users.slice(startIndex, endIndex);
-      const count = users.length;
+      const count = filteredUsers.length;
+      const data = filteredUsers.slice(startIndex, endIndex);
       const total_pages = Math.ceil(count / page_size);
+      
 
       const prev = () => {
         return page_number > 1;
@@ -27,7 +75,7 @@ async function getUsers(request, response, next) {
       const after = () => {
         return page_number < total_pages;
       };
-
+      
       const has_previous_page = prev();
       const has_next_page = after();
 

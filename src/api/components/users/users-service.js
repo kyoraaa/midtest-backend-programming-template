@@ -21,11 +21,6 @@ async function getUsers() {
   return results;
 }
 
-async function pagination(){
-  const users = await usersRepository.getUser();
-
-}
-
 /**
  * Get user detail
  * @param {string} id - User ID
