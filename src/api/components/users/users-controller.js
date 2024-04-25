@@ -11,31 +11,39 @@ const { errorResponder, errorTypes } = require('../../../core/errors');
 async function getUsers(request, response, next) {
   try {
     const users = await usersService.getUsers();
-    const page = parseInt(request.query.page);
-    const limit = parseInt(request.query.limit);
+    const page_number = parseInt(request.query.page_number);
+    const page_size = parseInt(request.query.page_size);
 
-    if (page){
-      const startIndex = (page - 1) * limit;
-      const endIndex = page * limit;
-      const resultUsers = users.slice(startIndex, endIndex); 
-      const count = users.length
-      const total_pages =  Math.ceil(count/limit);
+    if (page_number) {
+      const startIndex = (page_number - 1) * page_size;
+      const endIndex = page_number * page_size;
+      const data = users.slice(startIndex, endIndex);
+      const count = users.length;
+      const total_pages = Math.ceil(count / page_size);
 
-      const prev = () => {return page > 1}
-      const after = () => {return page < total_pages};
+      const prev = () => {
+        return page_number > 1;
+      };
+      const after = () => {
+        return page_number < total_pages;
+      };
 
       const has_previous_page = prev();
       const has_next_page = after();
 
-      return response.json({page,limit,count,total_pages,has_previous_page,has_next_page,resultUsers});  
+      return response.json({
+        page_number,
+        page_size,
+        count,
+        total_pages,
+        has_previous_page,
+        has_next_page,
+        data,
+      });
+    } else {
+      return response.json({ users });
     }
-
-    else{
-      return response.json({users});
-    }
-    
-  }
-    catch (error) {
+  } catch (error) {
     return next(error);
   }
 }
@@ -60,7 +68,6 @@ async function getUser(request, response, next) {
     return next(error);
   }
 }
-
 
 /**
  * Handle create user request
@@ -219,5 +226,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
-  changePassword
+  changePassword,
 };
