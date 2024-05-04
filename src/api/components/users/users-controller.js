@@ -51,6 +51,7 @@ async function getUsers(request, response, next) {
           user[request.searchField].includes(request.searchKey)
         );
       }
+      
       filteredUsers.sort((a, b) => {
         if (request.sortOrder === 'asc') {
           return a[request.sortField].localeCompare(b[request.sortField]);

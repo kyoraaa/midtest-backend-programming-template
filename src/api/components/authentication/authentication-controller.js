@@ -12,16 +12,17 @@ const moment = require('moment');
 async function login(request, response, next) {
   const { email, password } = request.body;
   const users = await usersRepository.getUserByEmail(email);
+  //moment digunakan untuk memformat tanggal dan waktu
   const currentTime =  moment().format('YYYY-MM-DD HH:mm:ss');
   //time dalam menit, jika terkena limit maka bs login lagi setelah time+30
   const time = Math.floor(Date.now() / 60000);
 
   try {
-    // Check login credentials
+    //mengambil data attempt dan waktu apabila ada
     let attempt = users.attempt;
     let times = users.time
-    //jika sdh melewati, maka attempt = 0
-    if (times != null && times+1 <= time){
+    //jika sdh melewati, maka attempt = 0 dan time = null
+    if (times != null && times+30 <= time){
       await usersRepository.updateAttempt(email, 0);
       await usersRepository.updateTime(email, null);
       attempt = 0;
@@ -45,10 +46,10 @@ async function login(request, response, next) {
       }
       await usersRepository.updateAttempt(email, 0);
     }else{
-      return response.json("["+currentTime+"]"+" User "+ email + " mencoba login, namun mendapat error 403 karena telah melebihi limit attempt.");
+      throw errorResponder(errorTypes.FORBIDDEN, "["+currentTime+"]"+" User "+ email + " mencoba login, namun mendapat error 403 karena telah melebihi limit attempt.");
     }
     attempt = 0;
-    return response.json({attempt});
+    return response.json({loginSuccess});
 
   } catch (error) {
     return next(error);
