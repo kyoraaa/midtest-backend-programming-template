@@ -1,5 +1,6 @@
 const usersService = require('./users-service');
 const { errorResponder, errorTypes } = require('../../../core/errors');
+const { getUserByRek } = require('./users-repository');
 
 /**
  * Handle get list of users request
@@ -11,10 +12,12 @@ const { errorResponder, errorTypes } = require('../../../core/errors');
 async function getUsers(request, response, next) {
   try {
     const users = await usersService.getUsers();
-    const { sort, search } = request.query;
-
+    const sort = request.query.sort;
+    const search = request.query.search;
+    
     let sortField = 'email';
     let sortOrder = 'asc';
+
     if (sort) {
       const [field, order] = sort.split(':');
       if (['email', 'name'].includes(field)) {
@@ -51,7 +54,7 @@ async function getUsers(request, response, next) {
           user[request.searchField].includes(request.searchKey)
         );
       }
-      
+
       filteredUsers.sort((a, b) => {
         if (request.sortOrder === 'asc') {
           return a[request.sortField].localeCompare(b[request.sortField]);
@@ -60,8 +63,10 @@ async function getUsers(request, response, next) {
         }
       });
 
+
       const startIndex = (page_number - 1) * page_size;
       const endIndex = page_number * page_size;
+      //count digunakan untuk menghitung jumlah data yang ada
       const count = filteredUsers.length;
       const data = filteredUsers.slice(startIndex, endIndex);
       const total_pages = Math.ceil(count / page_size);
@@ -85,6 +90,7 @@ async function getUsers(request, response, next) {
         has_next_page,
         data,
       });
+
     } else {
       return response.json({ users });
     }
@@ -123,11 +129,13 @@ async function getUser(request, response, next) {
  */
 async function createUser(request, response, next) {
   try {
+    let rek =  parseInt(Math.floor(Date.now() / 10000));
+
     const name = request.body.name;
     const email = request.body.email;
     const password = request.body.password;
     const password_confirm = request.body.password_confirm;
-
+    
     // Check confirmation password
     if (password !== password_confirm) {
       throw errorResponder(
@@ -135,7 +143,7 @@ async function createUser(request, response, next) {
         'Password confirmation mismatched'
       );
     }
-
+    
     // Email must be unique
     const emailIsRegistered = await usersService.emailIsRegistered(email);
     if (emailIsRegistered) {
@@ -145,7 +153,7 @@ async function createUser(request, response, next) {
       );
     }
 
-    const success = await usersService.createUser(name, email, password);
+    const success = await usersService.createUser(rek, name, email, password);
     if (!success) {
       throw errorResponder(
         errorTypes.UNPROCESSABLE_ENTITY,
@@ -153,7 +161,7 @@ async function createUser(request, response, next) {
       );
     }
 
-    return response.status(200).json({ name, email });
+    return response.status(200).json({rek, name, email });
   } catch (error) {
     return next(error);
   }
@@ -272,4 +280,5 @@ module.exports = {
   updateUser,
   deleteUser,
   changePassword,
+  getUserByRek
 };

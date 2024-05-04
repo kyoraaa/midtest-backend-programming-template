@@ -1,5 +1,10 @@
 const { User } = require('../../../models');
 
+
+// async function createTransaction(){
+
+// }
+
 /**
  * Get a list of users
  * @returns {Promise}
@@ -7,6 +12,7 @@ const { User } = require('../../../models');
 async function getUsers() {
   return User.find({});
 }
+
 
 /**
  * Get user detail
@@ -17,6 +23,10 @@ async function getUser(id) {
   return User.findById(id);
 }
 
+async function getBalance(rek){
+  return User.findOne(rek);
+}
+
 /**
  * Create new user
  * @param {string} name - Name
@@ -24,11 +34,13 @@ async function getUser(id) {
  * @param {string} password - Hashed password
  * @returns {Promise}
  */
-async function createUser(name, email, password) {
+async function createUser(rek, name, email, password) {
   return User.create({
+    rek,
     name,
     email,
     password,
+    balance:0,
   });
 }
 
@@ -96,6 +108,11 @@ async function deleteUser(id) {
 async function getUserByEmail(email) {
   return User.findOne({ email });
 }
+
+async function getUserByRek(rek){
+  return User.findOne({rek});
+}
+
 /**
  * Update user password
  * @param {string} id - User ID
@@ -115,5 +132,7 @@ module.exports = {
   getUserByEmail,
   changePassword,
   updateAttempt,
-  updateTime
+  updateTime,
+  getUserByRek,
+  getBalance
 };

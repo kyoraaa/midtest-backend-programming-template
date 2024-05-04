@@ -1,11 +1,12 @@
-const { attempt } = require("joi");
-
 const usersSchema = {
+  rek: Number,
   name: String,
   email: String,
   password: String,
   attempt: {type: Number, default: 0},
-  time: Number
+  time: Number,
+  balance: {type: Number, defult: 0},
 };
 
 module.exports = usersSchema;
+

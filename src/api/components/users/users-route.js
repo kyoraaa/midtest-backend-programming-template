@@ -20,7 +20,7 @@ module.exports = (app) => {
     celebrate(usersValidator.createUser),
     usersControllers.createUser
   );
-
+  
   // Get user detail
   route.get('/:id', authenticationMiddleware, usersControllers.getUser);
 

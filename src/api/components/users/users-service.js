@@ -41,6 +41,17 @@ async function getUser(id) {
   };
 }
 
+async function getBalance (rek){
+  const user = await usersRepository.getBalance(rek);
+  if (!user) {
+    return null;
+  }
+  return {
+    rek: user.rek,
+    balance: user.balance
+  };
+}
+
 /**
  * Create new user
  * @param {string} name - Name
@@ -48,12 +59,12 @@ async function getUser(id) {
  * @param {string} password - Password
  * @returns {boolean}
  */
-async function createUser(name, email, password) {
+async function createUser(rek, name, email, password) {
   // Hash password
   const hashedPassword = await hashPassword(password);
 
   try {
-    await usersRepository.createUser(name, email, hashedPassword);
+    await usersRepository.createUser(rek, name, email, hashedPassword);
   } catch (err) {
     return null;
   }
@@ -122,6 +133,8 @@ async function emailIsRegistered(email) {
   return false;
 }
 
+
+
 /**
  * Check whether the password is correct
  * @param {string} userId - User ID
@@ -170,4 +183,5 @@ module.exports = {
   emailIsRegistered,
   checkPassword,
   changePassword,
+  getBalance
 };
