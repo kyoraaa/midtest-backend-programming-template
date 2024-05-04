@@ -53,6 +53,32 @@ async function updateUser(id, name, email) {
   );
 }
 
+async function updateAttempt(email,x) {
+  return User.updateOne(
+    {
+      email: email,
+    },
+    {
+      $set: {
+        attempt: x,
+      },
+    }
+  );
+}
+
+async function updateTime(email,y){
+  return User.updateOne(
+    {
+      email: email,
+    },
+    {
+      $set: {
+        time: y,
+      },
+    }
+  );
+}
+
 /**
  * Delete a user
  * @param {string} id - User ID
@@ -70,7 +96,6 @@ async function deleteUser(id) {
 async function getUserByEmail(email) {
   return User.findOne({ email });
 }
-
 /**
  * Update user password
  * @param {string} id - User ID
@@ -89,4 +114,6 @@ module.exports = {
   deleteUser,
   getUserByEmail,
   changePassword,
+  updateAttempt,
+  updateTime
 };

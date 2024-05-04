@@ -48,7 +48,7 @@ const errorTypes = {
     code: 'ALERT_ERROR',
   }, // hacker tryout case errors
   FORBIDDEN: {
-    description: 'Access forbidden',
+    description: 'Too many failed login attempts',
     status: 403,
     code: 'FORBIDDEN_ERROR',
   },

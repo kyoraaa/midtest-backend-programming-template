@@ -40,12 +40,12 @@ async function getUsers(request, response, next) {
     request.sortOrder = sortOrder;
     request.searchField = searchField;
     request.searchKey = searchKey;
-
+    
     let filteredUsers = users;
     const page_number = parseInt(request.query.page_number);
     const page_size = parseInt(request.query.page_size);
 
-    if (page_number) {
+    if (page_number && page_size) {
       if (request.searchField && request.searchKey) {
         filteredUsers = filteredUsers.filter((user) =>
           user[request.searchField].includes(request.searchKey)
