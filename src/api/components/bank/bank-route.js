@@ -11,10 +11,11 @@ module.exports = (app) => {
   app.use('/transaction', route);
 
   // Get list of transaction
-  route.get('/:id', authenticationMiddleware, bankControllers.getTrans);
+  route.get('/:rek', authenticationMiddleware, bankControllers.getTrans);
 
+  //create transaction
   route.post(
-    '/:id',
+    '/:rek',
     authenticationMiddleware,
     bankControllers.transfer
   );

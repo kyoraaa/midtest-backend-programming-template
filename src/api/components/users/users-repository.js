@@ -23,10 +23,6 @@ async function getUser(id) {
   return User.findById(id);
 }
 
-async function getBalance(rek){
-  return User.findOne(rek);
-}
-
 /**
  * Create new user
  * @param {string} name - Name
@@ -109,6 +105,7 @@ async function getUserByEmail(email) {
   return User.findOne({ email });
 }
 
+//harus findone
 async function getUserByRek(rek){
   return User.findOne({rek});
 }
@@ -134,5 +131,4 @@ module.exports = {
   updateAttempt,
   updateTime,
   getUserByRek,
-  getBalance
 };

@@ -22,7 +22,9 @@ module.exports = (app) => {
   );
   
   // Get user detail
-  route.get('/:id', authenticationMiddleware, usersControllers.getUser);
+  route.get('/a/:id', authenticationMiddleware, usersControllers.getUser);
+
+  route.get('/:rek', authenticationMiddleware, usersControllers.getBalance);
 
   // Update user
   route.put(

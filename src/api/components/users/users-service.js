@@ -42,14 +42,14 @@ async function getUser(id) {
 }
 
 async function getBalance (rek){
-  const user = await usersRepository.getBalance(rek);
+  const user = await usersRepository.getUserByRek(rek);
   if (!user) {
     return null;
   }
-  return {
-    rek: user.rek,
-    balance: user.balance
-  };
+
+  else{
+    return user.balance;
+};
 }
 
 /**

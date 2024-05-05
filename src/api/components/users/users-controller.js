@@ -120,6 +120,21 @@ async function getUser(request, response, next) {
   }
 }
 
+async function getBalance(request,response,next){
+  try{
+    const user = await usersService.getBalance(request.params.rek);
+
+    if (!user) {
+      throw errorResponder(errorTypes.UNPROCESSABLE_ENTITY, 'Unknown user');
+    }
+
+    return response.json(user);
+
+  } catch (error) {
+    return next(error);
+  }
+}
+
 /**
  * Handle create user request
  * @param {object} request - Express request object
@@ -280,5 +295,6 @@ module.exports = {
   updateUser,
   deleteUser,
   changePassword,
-  getUserByRek
+  getUserByRek,
+  getBalance
 };

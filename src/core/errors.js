@@ -67,6 +67,15 @@ const errorTypes = {
     status: 403,
     code: 'INVALID_CREDENTIALS_ERROR',
   },
+  INVALID_REK: {
+    description: 'Invalid Rek',
+    status: 403,
+    code: 'INVALID_REK_NOT_FOUND',
+  },INVALID_REK_SAMA: {
+    description: 'Invalid Rek',
+    status: 403,
+    code: 'INVALID_REK_SAMA',
+  },
   INVALID_PASSWORD: {
     description: 'Invalid password',
     status: 403,

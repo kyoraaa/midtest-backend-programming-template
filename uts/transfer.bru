@@ -1,11 +1,11 @@
 meta {
-  name: create acc
+  name: transfer
   type: http
-  seq: 4
+  seq: 7
 }
 
 post {
-  url: http://localhost:5000/api/users
+  url: http://localhost:5000/api/transaction/171488277
   body: json
   auth: none
 }
@@ -16,9 +16,7 @@ headers {
 
 body:json {
   {
-    "name": "b",
-    "email": "b@gmail.com",
-    "password": "Aaaaa01%",
-    "password_confirm": "Aaaaa01%"
+    "tujuan": "171488274",
+    "nominal": 100
   }
 }

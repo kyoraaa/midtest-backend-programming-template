@@ -5,11 +5,18 @@ meta {
 }
 
 get {
-  url: http://localhost:5000/api/users
+  url: http://localhost:5000/api/users/
   body: none
   auth: none
 }
 
+query {
+  ~page_number: 1
+  ~page_size: 3
+  ~search: email:user
+  ~sort: email:asc
+}
+
 headers {
-  Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwidXNlcklkIjoiNjYxNTZjZjk3MjExOWFiNDEwYWJkNTI4IiwiaWF0IjoxNzEzODkwNjgyLCJleHAiOjE3MTM5NzcwODJ9.D7HO9izjwkAfR1bEyb9UCXlSCWOxgHMNvk1PMM11Xj0
+  Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwidXNlcklkIjoiNjYzNzA4N2UyZGUxZjE5MWFhN2RlZDM4IiwiaWF0IjoxNzE0ODgyNzExLCJleHAiOjE3MTQ5NjkxMTF9.n3iJ-fUH1Lu4RPS5-Y_2iGx69R8RdSa8Xlr1SM8qS3o
 }
