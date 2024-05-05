@@ -1,15 +1,25 @@
 meta {
-  name: get transaction
+  name: Deposit
   type: http
-  seq: 5
+  seq: 7
 }
 
-get {
+put {
   url: http://localhost:5000/api/transaction/171488277
-  body: none
+  body: json
   auth: none
+}
+
+query {
+  ~: 
 }
 
 headers {
   Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwidXNlcklkIjoiNjYzNzA4N2UyZGUxZjE5MWFhN2RlZDM4IiwiaWF0IjoxNzE0ODgyNzExLCJleHAiOjE3MTQ5NjkxMTF9.n3iJ-fUH1Lu4RPS5-Y_2iGx69R8RdSa8Xlr1SM8qS3o
+}
+
+body:json {
+  {
+    "nominal" : 10000
+  }
 }

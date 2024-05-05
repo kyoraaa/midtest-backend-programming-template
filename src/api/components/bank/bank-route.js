@@ -17,8 +17,22 @@ module.exports = (app) => {
   route.post(
     '/:rek',
     authenticationMiddleware,
+    celebrate(bankValidator.transfer),
     bankControllers.transfer
   );
+
+  route.put(
+    '/:rek',
+    authenticationMiddleware,
+    celebrate(bankValidator.deposit),
+    bankControllers.deposit
+  );
+
+  route.delete(
+    '/:id',
+    authenticationMiddleware,
+    bankControllers.deleteTrans
+  )
 
 
 }

@@ -3,22 +3,39 @@ const { User } = require('../../../models');
 const moment = require('moment');
 
 
+//untuk menampilkan semua transaksi
 async function getTrans() {
   return Trans.find({});
 }
 
-//create transaction
-async function createTransaction(rek,tujuan,nominal){
+//mengambil transaksi berdasarkan id
+async function getTran(id){
+  return Trans.findById(id);
+}
+
+//create transaction untuk transfer
+async function createTransaction(rek, tujuan, nominal) {
   return Trans.create({
     rek,
     tujuan,
     nominal,
-    tanggal:moment().format('YYYY-MM-DD HH:mm:ss')
+    tanggal: moment().format('YYYY-MM-DD HH:mm:ss'),
+    jenis: "Transfer", 
+  });
+}
+
+//membuat receipt deposit
+async function createDeposit(rek, nominal) {
+  return Trans.create({
+    tanggal: moment().format('YYYY-MM-DD HH:mm:ss'),
+    rek,
+    nominal,
+    jenis: "Deposit"
   });
 }
 
 //mengupdate saldo
-async function updateBalance(rek,nominal){
+async function updateBalance(rek, nominal) {
   return User.updateOne(
     {
       rek: rek,
@@ -28,12 +45,20 @@ async function updateBalance(rek,nominal){
         balance: nominal,
       },
     }
-  )
+  );
+
 }
 
+//menghapus saldo berdasarkan id
+async function deleteTrans(id) {
+  return Trans.deleteOne({ _id: id });
+} 
 
 module.exports = {
   getTrans,
   createTransaction,
-  updateBalance
-}
+  updateBalance,
+  createDeposit,
+  getTran,
+  deleteTrans
+};

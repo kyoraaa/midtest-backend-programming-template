@@ -5,7 +5,7 @@ const usersSchema = {
   password: String,
   attempt: {type: Number, default: 0},
   time: Number,
-  balance: {type: Number, defult: 0},
+  balance: {type: Number, default: 0},
 };
 
 module.exports = usersSchema;

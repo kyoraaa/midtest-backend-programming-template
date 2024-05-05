@@ -71,11 +71,26 @@ const errorTypes = {
     description: 'Invalid Rek',
     status: 403,
     code: 'INVALID_REK_NOT_FOUND',
-  },INVALID_REK_SAMA: {
+  },
+  INVALID_REK_SAMA: {
     description: 'Invalid Rek',
     status: 403,
     code: 'INVALID_REK_SAMA',
   },
+
+  INVALID_NOMINAL: {
+    description: 'Invalid Nominal',
+    status: 403,
+    code: 'INVALID_NOMINAL',
+  },
+
+  INVALID_SALDO: {
+    description: 'Invalid Saldo',
+    status: 403,
+    code: 'INVALID_SALDO',
+  },
+
+  
   INVALID_PASSWORD: {
     description: 'Invalid password',
     status: 403,

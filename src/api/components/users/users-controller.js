@@ -18,6 +18,7 @@ async function getUsers(request, response, next) {
     let sortField = 'email';
     let sortOrder = 'asc';
 
+    //sorting 
     if (sort) {
       const [field, order] = sort.split(':');
       if (['email', 'name'].includes(field)) {
@@ -31,6 +32,8 @@ async function getUsers(request, response, next) {
     }
     let searchField = null;
     let searchKey = null;
+    
+    //searching
     if (search) {
       const [field, key] = search.split(':');
       if (['email', 'name'].includes(field)) {
@@ -55,13 +58,25 @@ async function getUsers(request, response, next) {
         );
       }
 
+      // filteredUsers.sort((a, b) => {
+      //   if (request.sortOrder === 'asc') {
+      //     return a[request.sortField].localeCompare(b[request.sortField]);
+      //   } else {
+      //     return b[request.sortField].localeCompare(a[request.sortField]);
+      //   }
+      // });
       filteredUsers.sort((a, b) => {
-        if (request.sortOrder === 'asc') {
-          return a[request.sortField].localeCompare(b[request.sortField]);
-        } else {
-          return b[request.sortField].localeCompare(a[request.sortField]);
+        const fieldA = a[request.sortField];
+        const fieldB = b[request.sortField];
+    
+        if (fieldA < fieldB) {
+            return (request.sortOrder === 'asc') ? -1 : 1;
         }
-      });
+        if (fieldA > fieldB) {
+            return (request.sortOrder === 'asc') ? 1 : -1;
+        }
+        return 0;
+    });
 
 
       const startIndex = (page_number - 1) * page_size;
@@ -145,7 +160,10 @@ async function getBalance(request,response,next){
 async function createUser(request, response, next) {
   try {
     let rek =  parseInt(Math.floor(Date.now() / 10000));
-
+    //jika sudah terdapat rekening yang sama, maka rek+1
+    if (getUserByRek(rek)){
+      rek++;
+    }
     const name = request.body.name;
     const email = request.body.email;
     const password = request.body.password;
@@ -194,6 +212,7 @@ async function updateUser(request, response, next) {
     const id = request.params.id;
     const name = request.body.name;
     const email = request.body.email;
+    
 
     // Email must be unique
     const emailIsRegistered = await usersService.emailIsRegistered(email);

@@ -10,17 +10,19 @@ async function getTrans(rek) {
     const tran = trans[i];
     if (tran.rek === rek){
       results.push({
-        rek: tran.rek,
+        id: tran.id,
         tanggal: tran.tanggal,
+        jenis: tran.jenis,
+        rekening: tran.rek,
         tujuan: tran.tujuan,
-        nominal: tran.nominal
+        nominal: "Rp. " + tran.nominal,
       });
     }
   }
   return results;
 }
 
-//untuk membuat receipt
+//untuk membuat receipt transfer
 async function createTransaction(rek,tujuan,nominal){
   try{
     const x = await bankRepository.createTransaction(rek, tujuan, nominal);
@@ -31,6 +33,21 @@ async function createTransaction(rek,tujuan,nominal){
     return false;
   }
 }
+
+//untuk membuat receipt deposit
+async function createDeposit(rek,nominal){
+  try{
+    const x = await bankRepository.createDeposit(rek, nominal);
+    if (!x){
+      return false;
+    }
+    return true;
+  }catch(err){
+    return false;
+  }
+}
+
+
 
 //untuk mengecek keberadaan rekening
 async function isRek(rek){
@@ -50,13 +67,30 @@ async function updateBalance(rek, nominal){
   if (!user) {
     throw errorResponder(
       errorTypes.INVALID_REK,
-      'Rek tidak ditemukann!'
+      'Rekening tidak ditemukann!'
     );
   }
-    await bankRepository.updateBalance(rek,nominal);
+  await bankRepository.updateBalance(rek,nominal);
   }catch(err){
     return null;
   }
+  return true;
+}
+
+async function deleteTrans(id) {
+  const user = await bankRepository.getTran(id);
+
+  // User not found
+  if (!user) {
+    return null;
+  }
+
+  try {
+    await bankRepository.deleteTrans(id);
+  } catch (err) {
+    return null;
+  }
+
   return true;
 }
 
@@ -64,6 +98,7 @@ module.exports = {
   getTrans,
   isRek,
   createTransaction,
-  updateBalance
-
+  updateBalance,
+  createDeposit,
+  deleteTrans
 };

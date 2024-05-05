@@ -13,6 +13,8 @@ async function getUsers() {
   for (let i = 0; i < users.length; i += 1) {
     const user = users[i];
     results.push({
+      rekening: user.rek,
+      saldo: user.balance,
       id: user.id,
       name: user.name,
       email: user.email,
